@@ -217,18 +217,44 @@ bool arbol_vacio(abb_t* arbol){
 }
 
 
-void inorden(nodo_abb_t* nodo, void** array, size_t tamanio_array, size_t posicion_actual){
-  if(!nodo || posicion_actual == tamanio_array - 1)
+void inorden(nodo_abb_t* nodo, void** array, size_t tamanio_array, size_t* cantidad_actual){
+  if(!nodo || *cantidad_actual == tamanio_array)
     return;
   
   if(nodo->izquierda)
-    inorden(nodo->izquierda, array, tamanio_array, posicion_actual);
-  
-  array[posicion_actual++] = nodo->elemento;
+    inorden(nodo->izquierda, array, tamanio_array, cantidad_actual);
+
+  array[(*cantidad_actual)++] = nodo->elemento;
 
   if(nodo->derecha)
-    inorden(nodo->derecha, array, tamanio_array, posicion_actual);
+    inorden(nodo->derecha, array, tamanio_array, cantidad_actual);
+}
+
+void preorden(nodo_abb_t* nodo, void** array, size_t tamanio_array, size_t* cantidad_actual){
+  if(!nodo || *cantidad_actual == tamanio_array)
+    return;
   
+  array[(*cantidad_actual)++] = nodo->elemento;
+
+  if(nodo->izquierda)
+    preorden(nodo->izquierda, array, tamanio_array, cantidad_actual);
+
+
+  if(nodo->derecha)
+    preorden(nodo->derecha, array, tamanio_array, cantidad_actual);
+}
+
+void postorden(nodo_abb_t* nodo, void** array, size_t tamanio_array, size_t* cantidad_actual){
+  if(!nodo || *cantidad_actual == tamanio_array)
+    return;
+
+  if(nodo->izquierda)
+    postorden(nodo->izquierda, array, tamanio_array, cantidad_actual);
+
+  if(nodo->derecha)
+    postorden(nodo->derecha, array, tamanio_array, cantidad_actual);
+
+  array[(*cantidad_actual)++] = nodo->elemento;
 }
 
 /*
@@ -243,11 +269,28 @@ size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array)
   if(!arbol || !arbol->nodo_raiz || !array)
     return 0;
   
-  size_t posicion_actual = 0;
-
-  inorden(arbol->nodo_raiz, array, tamanio_array, posicion_actual);
-  return posicion_actual + 1;
+  size_t cantidad_actual = 0;
+  inorden(arbol->nodo_raiz, array, tamanio_array, &cantidad_actual);
+  return cantidad_actual;
 }
+
+/*
+ * Llena el array del tamaño dado con los elementos de arbol
+ * en secuencia preorden.
+ * Devuelve la cantidad de elementos del array que pudo llenar (si el
+ * espacio en el array no alcanza para almacenar todos los elementos,
+ * llena hasta donde puede y devuelve la cantidad de elementos que
+ * pudo poner).
+ */
+size_t arbol_recorrido_preorden(abb_t* arbol, void** array, size_t tamanio_array){
+  if(!arbol || !arbol->nodo_raiz || !array)
+    return 0;
+  
+  size_t cantidad_actual = 0;
+  preorden(arbol->nodo_raiz, array, tamanio_array, &cantidad_actual);
+  return cantidad_actual;
+}
+
 
 /*
  * Destruye el arbol liberando la memoria reservada por el mismo.

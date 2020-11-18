@@ -161,39 +161,91 @@ void probar_buscar(){
 
 void probar_recorrido_inorden(){
     pa2m_nuevo_grupo("INORDEN");
-   // cosita_t* cosita1 = crear_cosita(1);
+    cosita_t* cosita1 = crear_cosita(1);
     cosita_t* cosita2 = crear_cosita(2);
-    //cosita_t* cosita3 = crear_cosita(3);
-   // cosita_t* cosita4 = crear_cosita(4);
-    //cosita_t* cosita5 = crear_cosita(5);
+    cosita_t* cosita3 = crear_cosita(3);
+    cosita_t* cosita4 = crear_cosita(4);
+    cosita_t* cosita5 = crear_cosita(5);
+    cosita_t* cosita6 = crear_cosita(6);
+    cosita_t* cosita7 = crear_cosita(7);
+    cosita_t* cosita8 = crear_cosita(8);
+    cosita_t* cosita9 = crear_cosita(9);
+    cosita_t* cosita10 = crear_cosita(10);
 
     abb_t* arbol = arbol_crear(comparar_cositas, NULL);
     arbol_insertar(arbol, cosita2);
-
-    void* cositas[1];
-
-    size_t cantidad_llenada = arbol_recorrido_inorden(arbol, cositas, 1);
-    printf("cantida llenada: %zu\n", cantidad_llenada);
-    printf("clave: %f\n", ((cosita_t*)cositas[0])->clave);
-    /*pa2m_afirmar(arbol_buscar(NULL, cosita1) == NULL, "No se encuentra un elemento en un arbol nulo");
-
-    pa2m_afirmar(arbol_buscar(arbol, cosita1) == NULL, "No se encuentra un elemento en el arbol vacío");
-
-    pa2m_afirmar(arbol_buscar(arbol, cosita2) == cosita2, "Se encuentra el único elemento");
-
-    arbol_insertar(arbol, cosita3);
-    pa2m_afirmar(arbol_buscar(arbol, cosita3) == cosita3, "Se encuentra el segundo elemento");
-
     arbol_insertar(arbol, cosita1);
-    pa2m_afirmar(arbol_buscar(arbol, cosita1) == cosita1, "Se encuentra el tercer elemento");
-
+    arbol_insertar(arbol, cosita3);
+    arbol_insertar(arbol, cosita5);
+    arbol_insertar(arbol, cosita9);
+    arbol_insertar(arbol, cosita10);
     arbol_insertar(arbol, cosita4);
-    pa2m_afirmar(arbol_buscar(arbol, cosita4) == cosita4, "Se encuentra el cuarto elemento");
+    arbol_insertar(arbol, cosita8);
+    arbol_insertar(arbol, cosita6);
+    arbol_insertar(arbol, cosita7);
+    void* cositas[10];
 
-    pa2m_afirmar(arbol_buscar(arbol, cosita5) == NULL, "No se encuentra un elemento que no se insertó");
-*/
+    pa2m_afirmar(arbol_recorrido_inorden(NULL, cositas, 10) == 0, "La cantidad de elementos recorriods en un arbol nulo es 0");
+    pa2m_afirmar(arbol_recorrido_inorden(arbol, NULL, 10) == 0, "Dada una lista nula, no se recorre el arbol");
+    pa2m_afirmar(arbol_recorrido_inorden(arbol, NULL, 0) == 0, "Si la cantidad de elementos para guardar es 0 no se recorre el arbol");
+
+
+    pa2m_afirmar(arbol_recorrido_inorden(arbol, cositas, 10) == 10, "Se recorren 10 elementos");
+
+    for(int i = 0; i < 10; i++){
+        pa2m_afirmar(((cosita_t*)cositas[i])->clave == i + 1, "guarda en inorden los 10 elementos");
+    }
+
     arbol_destruir(arbol);
     
+}
+
+void probar_recorrido_preorden(){
+    pa2m_nuevo_grupo("PREORDEN");
+    cosita_t* cosita1 = crear_cosita(1);
+    cosita_t* cosita2 = crear_cosita(2);
+    cosita_t* cosita3 = crear_cosita(3);
+    cosita_t* cosita4 = crear_cosita(4);
+    cosita_t* cosita5 = crear_cosita(5);
+    cosita_t* cosita6 = crear_cosita(6);
+    cosita_t* cosita7 = crear_cosita(7);
+    cosita_t* cosita8 = crear_cosita(8);
+    cosita_t* cosita9 = crear_cosita(9);
+    cosita_t* cosita10 = crear_cosita(10);
+
+    abb_t* arbol = arbol_crear(comparar_cositas, NULL);
+    arbol_insertar(arbol, cosita2);
+    arbol_insertar(arbol, cosita1);
+    arbol_insertar(arbol, cosita3);
+    arbol_insertar(arbol, cosita5);
+    arbol_insertar(arbol, cosita9);
+    arbol_insertar(arbol, cosita10);
+    arbol_insertar(arbol, cosita4);
+    arbol_insertar(arbol, cosita8);
+    arbol_insertar(arbol, cosita6);
+    arbol_insertar(arbol, cosita7);
+    void* cositas[10];
+
+    pa2m_afirmar(arbol_recorrido_preorden(NULL, cositas, 10) == 0, "La cantidad de elementos recorriods en un arbol nulo es 0");
+    pa2m_afirmar(arbol_recorrido_preorden(arbol, NULL, 10) == 0, "Dada una lista nula, no se recorre el arbol");
+    pa2m_afirmar(arbol_recorrido_preorden(arbol, NULL, 0) == 0, "Si la cantidad de elementos para guardar es 0 no se recorre el arbol");
+
+
+    pa2m_afirmar(arbol_recorrido_preorden(arbol, cositas, 10) == 10, "Se recorren 10 elementos");
+
+    pa2m_afirmar(((cosita_t*)cositas[0])->clave ==  2, "guarda en preorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[1])->clave ==  1, "guarda en preorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[2])->clave ==  3, "guarda en preorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[3])->clave ==  5, "guarda en preorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[4])->clave ==  4, "guarda en preorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[5])->clave ==  9, "guarda en preorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[6])->clave ==  8, "guarda en preorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[7])->clave ==  6, "guarda en preorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[8])->clave ==  7, "guarda en preorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[9])->clave ==  10, "guarda en preorden los 10 elementos");
+
+
+    arbol_destruir(arbol);
 }
 
 void probar_obtener_raiz(){
@@ -228,6 +280,7 @@ int main() {
     probar_insertar();
     probar_buscar();
     probar_recorrido_inorden();
+    probar_recorrido_preorden();
     probar_obtener_raiz();
     pa2m_mostrar_reporte();
     return 0;
