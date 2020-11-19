@@ -75,16 +75,6 @@ abb_t* crear_arbol_con_elementos(char* claves){
     return arbol;
 }
 
-
-/*
- * Destructor de elementos. Cada vez que un elemento deja el arbol
- * (arbol_borrar o arbol_destruir) se invoca al destructor pasandole
- * el elemento.
- */
-void abb_liberar_numero(void* elemento){
-
-}
-
 void probar_creacion(){
     pa2m_nuevo_grupo("CREACIÓN");
 
@@ -151,56 +141,29 @@ void probar_insertar(){
 
 void probar_borrar(){
     pa2m_nuevo_grupo("BORRAR");
-    cosita_t* cosita1 = crear_cosita(1);
-    cosita_t* cosita2 = crear_cosita(2);
-    cosita_t* cosita3 = crear_cosita(3);
-    cosita_t* cosita4 = crear_cosita(4);
-    cosita_t* cosita5 = crear_cosita(5);
-    cosita_t* cosita6 = crear_cosita(6);
-    cosita_t* cosita7 = crear_cosita(7);
-    cosita_t* cosita8 = crear_cosita(8);
-    cosita_t* cosita9 = crear_cosita(9);
-    cosita_t* cosita10 = crear_cosita(10);
-    cosita_t* cosita11 = crear_cosita(11);
-    cosita_t* cosita12 = crear_cosita(12);
-    cosita_t* cosita13 = crear_cosita(13);
-    cosita_t* cosita14 = crear_cosita(14);
-    cosita_t* cosita15 = crear_cosita(15);
 
-    abb_t* arbol = arbol_crear(comparar_cositas, destruir_cosita);
-    arbol_insertar(arbol, cosita2);
-    arbol_insertar(arbol, cosita1);
-    arbol_insertar(arbol, cosita3);
-    arbol_insertar(arbol, cosita5);
-    arbol_insertar(arbol, cosita9);
-    arbol_insertar(arbol, cosita10);
-    arbol_insertar(arbol, cosita4);
-    arbol_insertar(arbol, cosita8);
-    arbol_insertar(arbol, cosita6);
-    arbol_insertar(arbol, cosita7);
-    arbol_insertar(arbol, cosita13);
-    arbol_insertar(arbol, cosita14);
-    arbol_insertar(arbol, cosita15);
-    arbol_insertar(arbol, cosita12);
-    arbol_insertar(arbol, cosita11);
+    char claves[MAX_CLAVES] = "2,1,3,5,9,10,4,8,6,7,13,14,15,12,11";
+    abb_t* arbol = crear_arbol_con_elementos(claves);
+    if(!arbol)
+        return;
 
     cosita_t* auxiliar = crear_cosita(0);
 
     auxiliar->clave = 1;
-    pa2m_afirmar(arbol_borrar(arbol, cosita1) == EXITO, "borrar elemento hoja devuelve EXITO");
+    pa2m_afirmar(arbol_borrar(arbol, auxiliar) == EXITO, "borrar elemento hoja devuelve EXITO");
     pa2m_afirmar(arbol_buscar(arbol, auxiliar) == NULL, "El elemento ya no se encuentra en el arbol");
 
 
     auxiliar->clave = 4;
-    pa2m_afirmar(arbol_borrar(arbol, cosita4) == EXITO, "borrar otro elemento hoja devuelve EXITO");
+    pa2m_afirmar(arbol_borrar(arbol, auxiliar) == EXITO, "borrar otro elemento hoja devuelve EXITO");
     pa2m_afirmar(arbol_buscar(arbol, auxiliar) == NULL, "El elemento ya no se encuentra en el arbol");
 
     auxiliar->clave = 14;
-    pa2m_afirmar(arbol_borrar(arbol, cosita14) == EXITO, "borrar elemento con hijos de rama derecha devuelve EXITO");
+    pa2m_afirmar(arbol_borrar(arbol, auxiliar) == EXITO, "borrar elemento con hijos de rama derecha devuelve EXITO");
     pa2m_afirmar(arbol_buscar(arbol, auxiliar) == NULL, "El elemento ya no se encuentra en el arbol");
 
      auxiliar->clave = 12;
-    pa2m_afirmar(arbol_borrar(arbol, cosita12) == EXITO, "borrar elemento con hijos de rama izquierda devuelve EXITO");
+    pa2m_afirmar(arbol_borrar(arbol, auxiliar) == EXITO, "borrar elemento con hijos de rama izquierda devuelve EXITO");
     pa2m_afirmar(arbol_buscar(arbol, auxiliar) == NULL, "El elemento ya no se encuentra en el arbol");
 
 
@@ -210,32 +173,35 @@ void probar_borrar(){
 
 void probar_buscar(){
     pa2m_nuevo_grupo("BUSCAR");
-    cosita_t* cosita1 = crear_cosita(1);
-    cosita_t* cosita2 = crear_cosita(2);
-    cosita_t* cosita3 = crear_cosita(3);
-    cosita_t* cosita4 = crear_cosita(4);
-    cosita_t* cosita5 = crear_cosita(5);
+    char claves[MAX_CLAVES] = "2,3,1,4";
+    abb_t* arbol = crear_arbol_con_elementos(claves);
+    if(!arbol)
+        return;
 
-    pa2m_afirmar(arbol_buscar(NULL, cosita1) == NULL, "No se encuentra un elemento en un arbol nulo");
+    cosita_t* auxiliar = crear_cosita(5);
 
-    abb_t* arbol = arbol_crear(comparar_cositas, destruir_cosita);
-    pa2m_afirmar(arbol_buscar(arbol, cosita1) == NULL, "No se encuentra un elemento en el arbol vacío");
+    pa2m_afirmar(arbol_buscar(NULL, auxiliar) == NULL, "No se encuentra un elemento en un arbol nulo");
 
-    arbol_insertar(arbol, cosita2);
-    pa2m_afirmar(arbol_buscar(arbol, cosita2) == cosita2, "Se encuentra el único elemento");
+    abb_t* arbol_vacio = arbol_crear(comparar_cositas, destruir_cosita);
+    pa2m_afirmar(arbol_buscar(arbol_vacio, auxiliar) == NULL, "No se encuentra un elemento en el arbol vacío");
 
-    arbol_insertar(arbol, cosita3);
-    pa2m_afirmar(arbol_buscar(arbol, cosita3) == cosita3, "Se encuentra el segundo elemento");
+    auxiliar->clave = 2;
+    pa2m_afirmar(((cosita_t*)arbol_buscar(arbol, auxiliar))->clave == auxiliar->clave, "Se encuentra el elemento raiz elemento");
 
-    arbol_insertar(arbol, cosita1);
-    pa2m_afirmar(arbol_buscar(arbol, cosita1) == cosita1, "Se encuentra el tercer elemento");
+     auxiliar->clave = 3;
+    pa2m_afirmar(((cosita_t*)arbol_buscar(arbol, auxiliar))->clave == auxiliar->clave, "Se encuentra el segundo elemento");
 
-    arbol_insertar(arbol, cosita4);
-    pa2m_afirmar(arbol_buscar(arbol, cosita4) == cosita4, "Se encuentra el cuarto elemento");
+     auxiliar->clave = 1;
+    pa2m_afirmar(((cosita_t*)arbol_buscar(arbol, auxiliar))->clave == auxiliar->clave, "Se encuentra el tercer elemento");
 
-    pa2m_afirmar(arbol_buscar(arbol, cosita5) == NULL, "No se encuentra un elemento que no se insertó");
+     auxiliar->clave = 4;
+    pa2m_afirmar(((cosita_t*)arbol_buscar(arbol, auxiliar))->clave == auxiliar->clave, "Se encuentra el cuarto elemento");
 
-    destruir_cosita(cosita5);
+    auxiliar->clave = 5;
+    pa2m_afirmar(((cosita_t*)arbol_buscar(arbol, auxiliar)) == NULL, "No se encuentra un elemento que no se insertó");
+
+    destruir_cosita(auxiliar);
+    arbol_destruir(arbol_vacio);
     arbol_destruir(arbol);
     
 }
@@ -244,6 +210,8 @@ void probar_recorrido_inorden(){
     pa2m_nuevo_grupo("INORDEN");
 
     char claves[MAX_CLAVES] = "2,1,3,5,9,10,4,8,6,7";
+    float claves_esperadas[MAX_CLAVES] = {1,2,3,4,5,6,7,8,9,10};
+
     abb_t* arbol = crear_arbol_con_elementos(claves);
     if(!arbol)
         return;
@@ -259,7 +227,7 @@ void probar_recorrido_inorden(){
 
     bool guardo_en_orden = true;
     for(int i = 0; i < 10 && guardo_en_orden; i++){
-        guardo_en_orden = ((cosita_t*)cositas[i])->clave == i + 1;
+        guardo_en_orden = ((cosita_t*)cositas[i])->clave == claves_esperadas[i];
     }
     pa2m_afirmar(guardo_en_orden, "guarda en inorden los 10 elementos");
 
@@ -298,7 +266,7 @@ void probar_recorrido_postorden(){
     pa2m_nuevo_grupo("POSTORDEN");
     
     char claves[MAX_CLAVES] = "2,1,3,5,9,10,4,8,6,7";
-    float claves_esperadas[MAX_CLAVES] = {2,1,3,5,4,9,8,6,7,10};
+    float claves_esperadas[MAX_CLAVES] = {1,4,7,6,8,10,9,5,3,2};
 
     abb_t* arbol = crear_arbol_con_elementos(claves);
     if(!arbol)
@@ -313,17 +281,11 @@ void probar_recorrido_postorden(){
 
     pa2m_afirmar(arbol_recorrido_postorden(arbol, cositas, 10) == 10, "Se recorren 10 elementos");
 
-    pa2m_afirmar(((cosita_t*)cositas[0])->clave ==  1, "guarda en postorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[1])->clave ==  4, "guarda en postorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[2])->clave ==  7, "guarda en postorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[3])->clave ==  6, "guarda en postorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[4])->clave ==  8, "guarda en postorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[5])->clave ==  10, "guarda en postorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[6])->clave ==  9, "guarda en postorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[7])->clave ==  5, "guarda en postorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[8])->clave ==  3, "guarda en postorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[9])->clave ==  2, "guarda en postorden los 10 elementos");
-
+    bool guardo_en_orden = true;
+    for(int i = 0; i < 10 && guardo_en_orden; i++){
+        guardo_en_orden = ((cosita_t*)cositas[i])->clave == claves_esperadas[i];
+    }
+    pa2m_afirmar(guardo_en_orden, "guarda en postorden los 10 elementos");
     arbol_destruir(arbol);
 }
 
@@ -365,18 +327,13 @@ bool recorrer_hasta_5_imprimir_nodo(void* elemento, void* contador){
 void probar_iterador_interno(){
     pa2m_nuevo_grupo("ITERADOR INTERNO");
 
-    cosita_t* cosita1 = crear_cosita(1);
-    cosita_t* cosita2 = crear_cosita(2);
-    cosita_t* cosita3 = crear_cosita(3);
-    cosita_t* cosita4 = crear_cosita(4);
-    cosita_t* cosita5 = crear_cosita(5);
-    cosita_t* cosita6 = crear_cosita(6);
-    cosita_t* cosita7 = crear_cosita(7);
-    cosita_t* cosita8 = crear_cosita(8);
-    cosita_t* cosita9 = crear_cosita(9);
-    cosita_t* cosita10 = crear_cosita(10);
+    
+    char claves[MAX_CLAVES] = "2,1,3,5,9,10,4,8,6,7";
+    abb_t* arbol = crear_arbol_con_elementos(claves);
+    if(!arbol)
+        return;
 
-    abb_t* arbol = arbol_crear(comparar_cositas, destruir_cosita);
+    abb_t* arbol_vacio = arbol_crear(comparar_cositas, destruir_cosita);
     int contador = 0;
 
     pa2m_afirmar(
@@ -385,32 +342,21 @@ void probar_iterador_interno(){
         "Dado un arbol nulo, se recorren 0 elementos");
     
     pa2m_afirmar(
-        abb_con_cada_elemento(arbol, 999, recorrer_hasta_5_imprimir_nodo, (void*)&contador) == 0 &&
+        abb_con_cada_elemento(arbol_vacio, 999, recorrer_hasta_5_imprimir_nodo, (void*)&contador) == 0 &&
         contador == 0,
         "Dado un recorrido no válido, se recorren 0 elementos");
 
     pa2m_afirmar(
-        abb_con_cada_elemento(arbol, ABB_RECORRER_POSTORDEN, NULL, (void*)&contador) == 0 &&
+        abb_con_cada_elemento(arbol_vacio, ABB_RECORRER_POSTORDEN, NULL, (void*)&contador) == 0 &&
         contador == 0,
         "Dado una función nula, se recorren 0 elementos");
 
     
     pa2m_afirmar(
-        abb_con_cada_elemento(arbol, ABB_RECORRER_PREORDEN, recorrer_hasta_5_imprimir_nodo, (void*)&contador) == 0 &&
+        abb_con_cada_elemento(arbol_vacio, ABB_RECORRER_PREORDEN, recorrer_hasta_5_imprimir_nodo, (void*)&contador) == 0 &&
         contador == 0,
         "Dado un arbol vacío, se recorren 0 elementos");
 
-
-    arbol_insertar(arbol, cosita2);
-    arbol_insertar(arbol, cosita1);
-    arbol_insertar(arbol, cosita3);
-    arbol_insertar(arbol, cosita5);
-    arbol_insertar(arbol, cosita9);
-    arbol_insertar(arbol, cosita10);
-    arbol_insertar(arbol, cosita4);
-    arbol_insertar(arbol, cosita8);
-    arbol_insertar(arbol, cosita6);
-    arbol_insertar(arbol, cosita7);
 
     pa2m_nuevo_grupo("ITERADOR INTERNO - INORDEN");
     size_t elementos_recorridos = abb_con_cada_elemento(arbol, ABB_RECORRER_INORDEN, recorrer_hasta_5_imprimir_nodo, (void*)&contador);
@@ -427,6 +373,7 @@ void probar_iterador_interno(){
     elementos_recorridos = abb_con_cada_elemento(arbol, ABB_RECORRER_POSTORDEN, recorrer_hasta_5_imprimir_nodo, (void*)&contador);
     pa2m_afirmar(elementos_recorridos == 5, "Se recorrieron 5 elementos");
 
+    arbol_destruir(arbol_vacio);
     arbol_destruir(arbol);
     
 }
