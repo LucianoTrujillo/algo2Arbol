@@ -319,6 +319,45 @@ void* arbol_buscar(abb_t* arbol, void* elemento){
   return nodo->elemento;
 }
 
+nodo_abb_t* sucesor_inorden(nodo_abb_t* nodo){
+  if(!nodo || !nodo->izquierda)
+    return nodo;
+  
+  return sucesor_inorden(nodo->izquierda);
+}
+
+nodo_abb_t* borrar_rec(nodo_abb_t* nodo, void* elemento, abb_comparador comparador, abb_liberar_elemento destructor){
+  if(!nodo) return nodo;
+
+  if(comparador(nodo->elemento, elemento) == PRIMER_ELEMENTO_MAYOR){
+    nodo->izquierda = borrar_rec(nodo->izquierda, elemento, comparador, destructor);
+
+  } else if(comparador(nodo->elemento, elemento) == SEGUNDO_ELEMENTO_MAYOR){
+    nodo->derecha = borrar_rec(nodo->derecha, elemento, comparador, destructor);
+
+  } else {
+
+    if(!nodo->izquierda){
+      nodo_abb_t* rama_derecha = nodo->derecha;
+      destruir_nodo(nodo, destructor);
+      return rama_derecha;
+
+    } else if(!nodo->derecha){
+      nodo_abb_t* rama_izquierda = nodo->izquierda;
+      destruir_nodo(nodo, destructor);
+      return rama_izquierda;
+
+    }
+
+    nodo_abb_t* sucesor_inorden_derecho = sucesor_inorden(nodo->derecha);
+    nodo->elemento = sucesor_inorden_derecho->elemento;
+
+    borrar_rec(nodo->derecha, sucesor_inorden_derecho->elemento, comparador, destructor);
+  }
+  
+  return nodo;
+}
+
 int arbol_borrar(abb_t* arbol, void* elemento){
   if(!arbol)
     return ERROR;
