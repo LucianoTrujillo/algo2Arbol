@@ -271,6 +271,7 @@ void probar_recorrido_preorden(){
     pa2m_nuevo_grupo("PREORDEN");
 
     char claves[MAX_CLAVES] = "2,1,3,5,9,10,4,8,6,7";
+    float claves_esperadas[MAX_CLAVES] = {2,1,3,5,4,9,8,6,7,10};
     abb_t* arbol = crear_arbol_con_elementos(claves);
     if(!arbol)
         return;
@@ -285,17 +286,11 @@ void probar_recorrido_preorden(){
 
     pa2m_afirmar(arbol_recorrido_preorden(arbol, cositas, 10) == 10, "Se recorren 10 elementos");
 
-    pa2m_afirmar(((cosita_t*)cositas[0])->clave ==  2, "guarda en preorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[1])->clave ==  1, "guarda en preorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[2])->clave ==  3, "guarda en preorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[3])->clave ==  5, "guarda en preorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[4])->clave ==  4, "guarda en preorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[5])->clave ==  9, "guarda en preorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[6])->clave ==  8, "guarda en preorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[7])->clave ==  6, "guarda en preorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[8])->clave ==  7, "guarda en preorden los 10 elementos");
-    pa2m_afirmar(((cosita_t*)cositas[9])->clave ==  10, "guarda en preorden los 10 elementos");
-
+    bool guardo_en_orden = true;
+    for(int i = 0; i < 10 && guardo_en_orden; i++){
+        guardo_en_orden = ((cosita_t*)cositas[i])->clave == claves_esperadas[i];
+    }
+    pa2m_afirmar(guardo_en_orden, "guarda en inorden los 10 elementos");
     arbol_destruir(arbol);
 }
 
@@ -303,6 +298,8 @@ void probar_recorrido_postorden(){
     pa2m_nuevo_grupo("POSTORDEN");
     
     char claves[MAX_CLAVES] = "2,1,3,5,9,10,4,8,6,7";
+    float claves_esperadas[MAX_CLAVES] = {2,1,3,5,4,9,8,6,7,10};
+
     abb_t* arbol = crear_arbol_con_elementos(claves);
     if(!arbol)
         return;
