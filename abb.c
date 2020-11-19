@@ -32,41 +32,6 @@ nodo_abb_t* crear_nodo(void* elemento){
     nodo->elemento = elemento;
     return nodo;
 }
-
-/*
-  Devuelve el padre del del nodo que contiene al elemento pasado por parámetros
-  Guarda para que lado se encuentra el hijo en dirección
-  Si no encuentra el padre, devuelve NULL y no modifica la dirección
-*/
-nodo_abb_t* buscar_padre(nodo_abb_t* nodo, abb_comparador comparador, void* elemento, int* direccion){
-    if(!nodo)
-        return NULL;
-    
-    if(nodo->izquierda && comparador(nodo->izquierda->elemento, elemento) == IGUALES){
-      *direccion = IZQ;
-      return nodo;
-    }
-
-    if(nodo->derecha && comparador(nodo->derecha->elemento, elemento) == IGUALES){
-      *direccion = DER;
-      return nodo;
-    }
-
-    if(nodo->izquierda){
-      nodo_abb_t* nodo_busqueda = buscar_padre(nodo->izquierda, comparador, elemento, direccion);
-      if(nodo_busqueda)
-        return nodo_busqueda;
-    }
-
-    if(nodo->derecha){
-      nodo_abb_t* nodo_busqueda = buscar_padre(nodo->derecha, comparador, elemento, direccion);
-      if(nodo_busqueda)
-        return nodo_busqueda;
-    }
-
-    return NULL;
-}
-
 /*
 
 */
@@ -117,59 +82,6 @@ void destruir_nodo(nodo_abb_t* nodo, abb_liberar_elemento destructor){
       destructor(nodo->elemento);
   free(nodo);
 }
-
-nodo_abb_t* borrar_doble_hijo(nodo_abb_t* nodo_padre, nodo_abb_t* nodo_borrado, int direccion, abb_liberar_elemento destructor){
-  nodo_abb_t* rama_derecha = nodo_borrado->derecha;
-  nodo_abb_t* rama_izq = nodo_borrado->izquierda;
-
-    nodo_abb_t* sucesor_inorden = NULL; //obtener_menor_de_mayores(nodo_borrado->derecha);
-    sucesor_inorden->derecha = rama_derecha;
-    sucesor_inorden->izquierda = rama_izq;
-
-  if(direccion == IZQ){
-    nodo_padre->izquierda = sucesor_inorden;
-  } else {
-    nodo_padre->derecha = sucesor_inorden;
-  }
-
-  return NULL;
-}
-/*
-
-*/
-void borrar_nodo(nodo_abb_t* nodo_padre, int direccion, abb_liberar_elemento destructor){
-  nodo_abb_t* nodo_borrar = direccion == IZQ ? nodo_padre->izquierda : nodo_padre->derecha;
-  //nodo_abb_t* aux;
-
-  if(!nodo_borrar->izquierda && !nodo_borrar->derecha){ //ningún hijo
-    if(direccion == IZQ)
-      nodo_padre->izquierda = NULL;
-    
-    if(direccion == DER)
-      nodo_padre->derecha = NULL;
-  } else if(nodo_borrar->izquierda && nodo_borrar->derecha){ //dos hijos
-    if(direccion == IZQ){
-      //nodo_padre->izquierda = borrar_doble_hijo(nodo_padre, nodo_padre->izquierda);
-    }
-
-  } else if(nodo_borrar->izquierda){ //tiene hijos rama izq
-    if(direccion == IZQ)
-      nodo_padre->izquierda = nodo_borrar->izquierda;
-
-    if(direccion == DER)
-      nodo_padre->derecha = nodo_borrar->izquierda;
-
-  } else if(nodo_borrar->derecha){ //tiene hijos rama izq
-    if(direccion == IZQ)
-      nodo_padre->izquierda = nodo_borrar->derecha;
-
-    if(direccion == DER)
-      nodo_padre->derecha = nodo_borrar->derecha;
-  }
-
-  destruir_nodo(nodo_borrar, destructor);
-}
-
 
 void inorden(nodo_abb_t* nodo, void** array, size_t tamanio_array, size_t* cantidad_actual){
   if(!nodo || *cantidad_actual == tamanio_array)
@@ -329,6 +241,7 @@ nodo_abb_t* sucesor_inorden(nodo_abb_t* nodo){
 nodo_abb_t* borrar_rec(nodo_abb_t* nodo, void* elemento, abb_comparador comparador, abb_liberar_elemento destructor){
   if(!nodo) return nodo;
 
+  //navegar hasta el nodo
   if(comparador(nodo->elemento, elemento) == PRIMER_ELEMENTO_MAYOR){
     nodo->izquierda = borrar_rec(nodo->izquierda, elemento, comparador, destructor);
 
@@ -336,7 +249,7 @@ nodo_abb_t* borrar_rec(nodo_abb_t* nodo, void* elemento, abb_comparador comparad
     nodo->derecha = borrar_rec(nodo->derecha, elemento, comparador, destructor);
 
   } else {
-
+    //nodo tiene una rama
     if(!nodo->izquierda){
       nodo_abb_t* rama_derecha = nodo->derecha;
       destruir_nodo(nodo, destructor);
@@ -349,6 +262,7 @@ nodo_abb_t* borrar_rec(nodo_abb_t* nodo, void* elemento, abb_comparador comparad
 
     }
 
+    //nodo tiene 2 ramas
     nodo_abb_t* sucesor_inorden_derecho = sucesor_inorden(nodo->derecha);
     nodo->elemento = sucesor_inorden_derecho->elemento;
 
@@ -362,13 +276,7 @@ int arbol_borrar(abb_t* arbol, void* elemento){
   if(!arbol)
     return ERROR;
 
-  int direccion_hijo = 0;
-  nodo_abb_t* nodo_padre = buscar_padre(arbol->nodo_raiz, arbol->comparador, elemento, &direccion_hijo);
-
-  if(!nodo_padre)
-    return ERROR;
-
-  borrar_nodo(nodo_padre, direccion_hijo, arbol->destructor);
+  arbol->nodo_raiz = borrar_rec(arbol->nodo_raiz, elemento, arbol->comparador, arbol->destructor);
 
   return EXITO;
 }

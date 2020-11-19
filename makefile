@@ -1,7 +1,7 @@
 CFLAGS=-g -std=c99 -Wall -Wconversion -Wtype-limits -pedantic -Werror -O0
 VFLAGS=--leak-check=full --track-origins=yes --show-reachable=yes
 OUTPUT=abb
-DEPENDENCIES=abb.c
+DEPENDENCIES=*.c
 ENTRY=pruebas.c
 
 all: $(OUTPUT) mem_test

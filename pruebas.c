@@ -107,6 +107,7 @@ void probar_insertar(){
     abb_t* arbol = arbol_crear(comparar_cositas, destruir_cosita);
     pa2m_afirmar(arbol_insertar(arbol, cosita2) == EXITO, "Primer elemento insertado devuelve EXITO");
     pa2m_afirmar(arbol->nodo_raiz->elemento == cosita2, "Al insertar un elemento en un árbol vacío queda como el elemento raíz");
+    pa2m_afirmar(arbol->nodo_raiz->izquierda == NULL && arbol->nodo_raiz->derecha, "Al insertarse un elemento sus ramas son nulas");
 
     pa2m_afirmar(arbol_insertar(arbol, cosita3) == EXITO, "Segundo elemento insertado devuelve EXITO");
     pa2m_afirmar(arbol->nodo_raiz->derecha->elemento == cosita3, "Segundo elemento (de mayor clave) se inserta a la derecha");
@@ -379,7 +380,7 @@ void probar_iterador_interno(){
 }
 
 
-int main() {
+/*int main() {
     probar_creacion();
     probar_insertar();
     probar_borrar();
@@ -391,4 +392,4 @@ int main() {
     probar_obtener_raiz();
     pa2m_mostrar_reporte();
     return 0;
-}
+}*/
