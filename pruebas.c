@@ -244,6 +244,52 @@ void probar_recorrido_preorden(){
     pa2m_afirmar(((cosita_t*)cositas[8])->clave ==  7, "guarda en preorden los 10 elementos");
     pa2m_afirmar(((cosita_t*)cositas[9])->clave ==  10, "guarda en preorden los 10 elementos");
 
+    arbol_destruir(arbol);
+}
+
+void probar_recorrido_postorden(){
+    pa2m_nuevo_grupo("POSTORDEN");
+    cosita_t* cosita1 = crear_cosita(1);
+    cosita_t* cosita2 = crear_cosita(2);
+    cosita_t* cosita3 = crear_cosita(3);
+    cosita_t* cosita4 = crear_cosita(4);
+    cosita_t* cosita5 = crear_cosita(5);
+    cosita_t* cosita6 = crear_cosita(6);
+    cosita_t* cosita7 = crear_cosita(7);
+    cosita_t* cosita8 = crear_cosita(8);
+    cosita_t* cosita9 = crear_cosita(9);
+    cosita_t* cosita10 = crear_cosita(10);
+
+    abb_t* arbol = arbol_crear(comparar_cositas, NULL);
+    arbol_insertar(arbol, cosita2);
+    arbol_insertar(arbol, cosita1);
+    arbol_insertar(arbol, cosita3);
+    arbol_insertar(arbol, cosita5);
+    arbol_insertar(arbol, cosita9);
+    arbol_insertar(arbol, cosita10);
+    arbol_insertar(arbol, cosita4);
+    arbol_insertar(arbol, cosita8);
+    arbol_insertar(arbol, cosita6);
+    arbol_insertar(arbol, cosita7);
+    void* cositas[10];
+
+    pa2m_afirmar(arbol_recorrido_postorden(NULL, cositas, 10) == 0, "La cantidad de elementos recorriods en un arbol nulo es 0");
+    pa2m_afirmar(arbol_recorrido_postorden(arbol, NULL, 10) == 0, "Dada una lista nula, no se recorre el arbol");
+    pa2m_afirmar(arbol_recorrido_postorden(arbol, NULL, 0) == 0, "Si la cantidad de elementos para guardar es 0 no se recorre el arbol");
+
+
+    pa2m_afirmar(arbol_recorrido_postorden(arbol, cositas, 10) == 10, "Se recorren 10 elementos");
+
+    pa2m_afirmar(((cosita_t*)cositas[0])->clave ==  1, "guarda en postorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[1])->clave ==  4, "guarda en postorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[2])->clave ==  7, "guarda en postorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[3])->clave ==  6, "guarda en postorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[4])->clave ==  8, "guarda en postorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[5])->clave ==  10, "guarda en postorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[6])->clave ==  9, "guarda en postorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[7])->clave ==  5, "guarda en postorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[8])->clave ==  3, "guarda en postorden los 10 elementos");
+    pa2m_afirmar(((cosita_t*)cositas[9])->clave ==  2, "guarda en postorden los 10 elementos");
 
     arbol_destruir(arbol);
 }
@@ -272,16 +318,96 @@ void probar_esta_vacio(){
     /*Falta probar con un nodo completo*/
 
     arbol_destruir(arbol);
-} 
+}
+
+bool recorrer_hasta_5_imprimir_nodo(void* elemento, void* contador){
+    (*(int*)contador)++;
+    printf("elemento nº %i tiene clave: %f\n", *(int*)contador,  ((cosita_t*)elemento)->clave);
+
+    if(*(int*)contador >= 5)
+        return true;
+    return false;
+}
+
+void probar_iterador_interno(){
+    pa2m_nuevo_grupo("ITERADOR INTERNO");
+
+    cosita_t* cosita1 = crear_cosita(1);
+    cosita_t* cosita2 = crear_cosita(2);
+    cosita_t* cosita3 = crear_cosita(3);
+    cosita_t* cosita4 = crear_cosita(4);
+    cosita_t* cosita5 = crear_cosita(5);
+    cosita_t* cosita6 = crear_cosita(6);
+    cosita_t* cosita7 = crear_cosita(7);
+    cosita_t* cosita8 = crear_cosita(8);
+    cosita_t* cosita9 = crear_cosita(9);
+    cosita_t* cosita10 = crear_cosita(10);
+
+    abb_t* arbol = arbol_crear(comparar_cositas, NULL);
+    int contador = 0;
+
+    pa2m_afirmar(
+        abb_con_cada_elemento(NULL, ABB_RECORRER_INORDEN, recorrer_hasta_5_imprimir_nodo, (void*)&contador) == 0 &&
+        contador == 0,
+        "Dado un arbol nulo, se recorren 0 elementos");
+    
+    pa2m_afirmar(
+        abb_con_cada_elemento(arbol, 999, recorrer_hasta_5_imprimir_nodo, (void*)&contador) == 0 &&
+        contador == 0,
+        "Dado un recorrido no válido, se recorren 0 elementos");
+
+    pa2m_afirmar(
+        abb_con_cada_elemento(arbol, ABB_RECORRER_POSTORDEN, NULL, (void*)&contador) == 0 &&
+        contador == 0,
+        "Dado una función nula, se recorren 0 elementos");
+
+    
+    pa2m_afirmar(
+        abb_con_cada_elemento(arbol, ABB_RECORRER_PREORDEN, recorrer_hasta_5_imprimir_nodo, (void*)&contador) == 0 &&
+        contador == 0,
+        "Dado un arbol vacío, se recorren 0 elementos");
+
+
+    arbol_insertar(arbol, cosita2);
+    arbol_insertar(arbol, cosita1);
+    arbol_insertar(arbol, cosita3);
+    arbol_insertar(arbol, cosita5);
+    arbol_insertar(arbol, cosita9);
+    arbol_insertar(arbol, cosita10);
+    arbol_insertar(arbol, cosita4);
+    arbol_insertar(arbol, cosita8);
+    arbol_insertar(arbol, cosita6);
+    arbol_insertar(arbol, cosita7);
+
+    pa2m_nuevo_grupo("ITERADOR INTERNO - INORDEN");
+    size_t elementos_recorridos = abb_con_cada_elemento(arbol, ABB_RECORRER_INORDEN, recorrer_hasta_5_imprimir_nodo, (void*)&contador);
+
+    pa2m_afirmar(elementos_recorridos == 5, "Se recorrieron 5 elementos");
+
+    pa2m_nuevo_grupo("ITERADOR INTERNO - PREORDEN");
+    contador = 0;
+    elementos_recorridos = abb_con_cada_elemento(arbol, ABB_RECORRER_PREORDEN, recorrer_hasta_5_imprimir_nodo, (void*)&contador);
+    pa2m_afirmar(elementos_recorridos == 5, "Se recorrieron 5 elementos");
+
+    pa2m_nuevo_grupo("ITERADOR INTERNO - POSTORDEN");
+    contador = 0;
+    elementos_recorridos = abb_con_cada_elemento(arbol, ABB_RECORRER_POSTORDEN, recorrer_hasta_5_imprimir_nodo, (void*)&contador);
+    pa2m_afirmar(elementos_recorridos == 5, "Se recorrieron 5 elementos");
+
+    arbol_destruir(arbol);
+    
+}
 
 
 int main() {
-    probar_creacion();
+    /*probar_creacion();
     probar_insertar();
     probar_buscar();
     probar_recorrido_inorden();
     probar_recorrido_preorden();
-    probar_obtener_raiz();
+    probar_recorrido_postorden();*/
+    probar_iterador_interno();
+    //probar_obtener_raiz();
     pa2m_mostrar_reporte();
     return 0;
 }
