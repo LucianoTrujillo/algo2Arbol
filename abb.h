@@ -35,6 +35,12 @@ typedef struct abb{
   abb_liberar_elemento destructor;
 } abb_t;
 
+typedef struct cosa{
+    int clave;
+    char contenido[10];
+}cosa;
+
+
 /*
  * Crea el arbol y reserva la memoria necesaria de la estructura.
  * Comparador se utiliza para comparar dos elementos.

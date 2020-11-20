@@ -1,11 +1,6 @@
 #include "abb.h"
 #include <stdio.h>
 
-typedef struct cosa{
-    int clave;
-    char contenido[10];
-}cosa;
-
 cosa* crear_cosa(int clave){
     cosa* c = (cosa*)malloc(sizeof(cosa));
     if(c)
@@ -111,13 +106,13 @@ int main(){
         printf("%i ", elementos[i]->clave);
     printf("\n");
 
+
     printf("\n\nInserto mas valores y pruebo el iterador interno\n\n");
     arbol_insertar(arbol, crear_cosa(15));
     arbol_insertar(arbol, crear_cosa(0));
     arbol_insertar(arbol, crear_cosa(9));
     arbol_insertar(arbol, crear_cosa(7));
     arbol_insertar(arbol, crear_cosa(4));
-
     
     printf("Recorrido inorden iterador interno: ");    
     abb_con_cada_elemento(arbol, ABB_RECORRER_INORDEN, mostrar_elemento, NULL);

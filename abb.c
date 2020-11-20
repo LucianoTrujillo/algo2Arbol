@@ -47,7 +47,7 @@ void imprimir_arbol(abb_t* arbol){
   
   while(!lista_vacia(cola)){
     corriente = lista_primero(cola);
-    printf("%f ", ((cosita_t*)(corriente->elemento))->clave);
+    printf("%i ", ((cosa*)(corriente->elemento))->clave);
     lista_desencolar(cola);
 
     if(corriente->izquierda)
@@ -153,7 +153,7 @@ void postorden(nodo_abb_t* nodo, void** array, size_t tamanio_array, size_t* can
 }
 
 
-bool recorrer_cada_elemento_inorden(nodo_abb_t* nodo, size_t* cantidad_recorridos, bool (*funcion)(void*, void*), void* extra){
+bool  recorrer_cada_elemento_inorden(nodo_abb_t* nodo, size_t* cantidad_recorridos, bool (*funcion)(void*, void*), void* extra){
   if(!nodo)
     return true;
 
@@ -261,10 +261,10 @@ void* arbol_buscar(abb_t* arbol, void* elemento){
 }
 
 nodo_abb_t* sucesor_inorden(nodo_abb_t* nodo){
-  if(!nodo || !nodo->izquierda)
+  if(!nodo || !nodo->derecha)
     return nodo;
   
-  return sucesor_inorden(nodo->izquierda);
+  return sucesor_inorden(nodo->derecha);
 }
 
 nodo_abb_t* borrar_rec(nodo_abb_t* nodo, void* elemento, abb_comparador comparador, abb_liberar_elemento destructor){
@@ -291,11 +291,11 @@ nodo_abb_t* borrar_rec(nodo_abb_t* nodo, void* elemento, abb_comparador comparad
     }
 
     //nodo tiene 2 ramas
-    nodo_abb_t* sucesor_inorden_derecho = sucesor_inorden(nodo->derecha);
+    nodo_abb_t* sucesor_inorden_izquierdo = sucesor_inorden(nodo->izquierda);
     nodo_abb_t* aux = nodo->elemento;
-    nodo->elemento = sucesor_inorden_derecho->elemento;
-    sucesor_inorden_derecho->elemento = aux;
-    nodo->derecha = borrar_rec(nodo->derecha, sucesor_inorden_derecho->elemento, comparador, destructor);
+    nodo->elemento = sucesor_inorden_izquierdo->elemento;
+    sucesor_inorden_izquierdo->elemento = aux;
+    nodo->izquierda = borrar_rec(nodo->izquierda, sucesor_inorden_izquierdo->elemento, comparador, destructor);
   }
   
   return nodo;
