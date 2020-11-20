@@ -107,7 +107,7 @@ void probar_insertar(){
     abb_t* arbol = arbol_crear(comparar_cositas, destruir_cosita);
     pa2m_afirmar(arbol_insertar(arbol, cosita2) == EXITO, "Primer elemento insertado devuelve EXITO");
     pa2m_afirmar(arbol->nodo_raiz->elemento == cosita2, "Al insertar un elemento en un árbol vacío queda como el elemento raíz");
-    pa2m_afirmar(arbol->nodo_raiz->izquierda == NULL && arbol->nodo_raiz->derecha, "Al insertarse un elemento sus ramas son nulas");
+    pa2m_afirmar(arbol->nodo_raiz->izquierda == NULL && arbol->nodo_raiz->derecha == NULL, "Al insertarse un elemento sus ramas son nulas");
 
     pa2m_afirmar(arbol_insertar(arbol, cosita3) == EXITO, "Segundo elemento insertado devuelve EXITO");
     pa2m_afirmar(arbol->nodo_raiz->derecha->elemento == cosita3, "Segundo elemento (de mayor clave) se inserta a la derecha");
@@ -135,7 +135,6 @@ void probar_insertar(){
 
     pa2m_afirmar(arbol_insertar(arbol, cosita6coma5) == EXITO, "Decimo elemento insertado devuelve EXITO");
     pa2m_afirmar(arbol->nodo_raiz->derecha->derecha->izquierda->derecha->elemento == cosita6coma5, "Decimo elemento se inserta dodne corresponde");
-
     arbol_destruir(arbol);
     
 }
@@ -143,31 +142,47 @@ void probar_insertar(){
 void probar_borrar(){
     pa2m_nuevo_grupo("BORRAR");
 
-    char claves[MAX_CLAVES] = "2,1,3,5,9,10,4,8,6,7,13,14,15,12,11";
+    char claves[MAX_CLAVES] = "2,1,0,3,2.5,5,9,10,4,13,14,15,12,11";
     abb_t* arbol = crear_arbol_con_elementos(claves);
     if(!arbol)
         return;
 
     cosita_t* auxiliar = crear_cosita(0);
 
-    auxiliar->clave = 1;
-    pa2m_afirmar(arbol_borrar(arbol, auxiliar) == EXITO, "borrar elemento hoja devuelve EXITO");
-    pa2m_afirmar(arbol_buscar(arbol, auxiliar) == NULL, "El elemento ya no se encuentra en el arbol");
-
-
+     imprimir_arbol(arbol);
     auxiliar->clave = 4;
-    pa2m_afirmar(arbol_borrar(arbol, auxiliar) == EXITO, "borrar otro elemento hoja devuelve EXITO");
+    pa2m_afirmar(arbol_borrar(arbol, auxiliar) == EXITO, "borrar un elemento (4) hoja devuelve EXITO");
     pa2m_afirmar(arbol_buscar(arbol, auxiliar) == NULL, "El elemento ya no se encuentra en el arbol");
+    pa2m_afirmar(arbol->nodo_raiz->derecha->derecha->izquierda == NULL, "El nodo que apuntaba al elemento ahora está en NULL")
 
-    auxiliar->clave = 14;
-    pa2m_afirmar(arbol_borrar(arbol, auxiliar) == EXITO, "borrar elemento con hijos de rama derecha devuelve EXITO");
+     imprimir_arbol(arbol);
+    auxiliar->clave = 1;
+    pa2m_afirmar(arbol_borrar(arbol, auxiliar) == EXITO, "borrar elemento (1) con hijos de rama izquierda devuelve EXITO");
     pa2m_afirmar(arbol_buscar(arbol, auxiliar) == NULL, "El elemento ya no se encuentra en el arbol");
+    pa2m_afirmar(((cosita_t*)(arbol->nodo_raiz->izquierda->elemento))->clave == 0, "El nodo que apuntaba al elemento ahora apunta a su hijo")
 
-     auxiliar->clave = 12;
-    pa2m_afirmar(arbol_borrar(arbol, auxiliar) == EXITO, "borrar elemento con hijos de rama izquierda devuelve EXITO");
+     imprimir_arbol(arbol);
+    auxiliar->clave = 9;
+    pa2m_afirmar(arbol_borrar(arbol, auxiliar) == EXITO, "borrar elemento (9) con hijos de rama derecha devuelve EXITO");
     pa2m_afirmar(arbol_buscar(arbol, auxiliar) == NULL, "El elemento ya no se encuentra en el arbol");
+    pa2m_afirmar(((cosita_t*)(arbol->nodo_raiz->derecha->derecha->derecha->elemento))->clave == 10, "El nodo que apuntaba al elemento ahora apunta a su hijo")
 
 
+     cosita_t* aux_insertar = crear_cosita(3.5);
+     arbol_insertar(arbol, aux_insertar);
+    imprimir_arbol(arbol);
+
+    cosita_t* aux_borrar = crear_cosita(5);
+    pa2m_afirmar(arbol_borrar(arbol, aux_borrar) == EXITO, "borrar elemento (5) con hijos en ambas ramas devuelve EXITO");
+
+    pa2m_afirmar(arbol_buscar(arbol, aux_borrar) == NULL, "El elemento ya no se encuentra en el arbol");
+    // pa2m_afirmar(((cosita_t*)(arbol->nodo_raiz->derecha->derecha->elemento))->clave == 10, "El nodo que apuntaba al elemento ahora apunta a su hijo");
+    // pa2m_afirmar(((cosita_t*)(arbol->nodo_raiz->derecha->izquierda->elemento))->clave == 2.5, "hereda la rama izquierda del nodo borrado");
+    // pa2m_afirmar(((cosita_t*)(arbol->nodo_raiz->derecha->derecha->elemento))->clave == 5, "hereda la rama derecha del nodo borrado");
+    imprimir_arbol(arbol);
+
+
+    destruir_cosita(aux_borrar);
     destruir_cosita(auxiliar);
     arbol_destruir(arbol);
 }
@@ -380,7 +395,7 @@ void probar_iterador_interno(){
 }
 
 
-/*int main() {
+int main() {
     probar_creacion();
     probar_insertar();
     probar_borrar();
@@ -392,4 +407,4 @@ void probar_iterador_interno(){
     probar_obtener_raiz();
     pa2m_mostrar_reporte();
     return 0;
-}*/
+}

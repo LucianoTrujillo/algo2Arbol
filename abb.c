@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "abb.h"
+#include "lista.h"
 
 #define EXITO 0
 #define ERROR 1
@@ -26,12 +27,40 @@ nodo_abb_t* crear_nodo(void* elemento){
 
     if(!nodo)
         return NULL;
-
     nodo->derecha = NULL;
     nodo->izquierda = NULL;
     nodo->elemento = elemento;
     return nodo;
 }
+
+/*typedef struct cosita {
+    float clave;
+    char contenido[10];
+}cosita_t;
+*/
+void imprimir_arbol(abb_t* arbol){
+  lista_t* cola = lista_crear();
+  nodo_abb_t* corriente = arbol->nodo_raiz;
+  lista_encolar(cola, corriente);
+
+  if(!arbol) return;
+  
+  while(!lista_vacia(cola)){
+    corriente = lista_primero(cola);
+    printf("%f ", ((cosita_t*)(corriente->elemento))->clave);
+    lista_desencolar(cola);
+
+    if(corriente->izquierda)
+      lista_encolar(cola, corriente->izquierda);
+    
+    if(corriente->derecha)
+      lista_encolar(cola, corriente->derecha);
+  }
+
+  lista_destruir(cola);
+  printf("\n\n");
+}
+
 /*
 
 */
@@ -247,7 +276,6 @@ nodo_abb_t* borrar_rec(nodo_abb_t* nodo, void* elemento, abb_comparador comparad
 
   } else if(comparador(nodo->elemento, elemento) == SEGUNDO_ELEMENTO_MAYOR){
     nodo->derecha = borrar_rec(nodo->derecha, elemento, comparador, destructor);
-
   } else {
     //nodo tiene una rama
     if(!nodo->izquierda){
@@ -264,9 +292,10 @@ nodo_abb_t* borrar_rec(nodo_abb_t* nodo, void* elemento, abb_comparador comparad
 
     //nodo tiene 2 ramas
     nodo_abb_t* sucesor_inorden_derecho = sucesor_inorden(nodo->derecha);
+    nodo_abb_t* aux = nodo->elemento;
     nodo->elemento = sucesor_inorden_derecho->elemento;
-
-    borrar_rec(nodo->derecha, sucesor_inorden_derecho->elemento, comparador, destructor);
+    sucesor_inorden_derecho->elemento = aux;
+    nodo->derecha = borrar_rec(nodo->derecha, sucesor_inorden_derecho->elemento, comparador, destructor);
   }
   
   return nodo;

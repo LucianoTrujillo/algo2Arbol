@@ -85,23 +85,20 @@ int main(){
     auxiliar->clave = 5;
     printf("Busco el elemento 5: %s\n", ((cosa*)arbol_buscar(arbol, auxiliar))->clave==5?"SI":"NO");
 
-    mostrar_elemento(arbol->nodo_raiz, NULL);
     auxiliar->clave = 7;
     printf("Borro nodo hoja (7): %s\n", (arbol_borrar(arbol, auxiliar))==0?"SI":"NO");
 
-    mostrar_elemento(arbol->nodo_raiz, NULL);
     auxiliar->clave = 6;
     printf("Borro nodo con un hijo (6): %s\n", (arbol_borrar(arbol, auxiliar))==0?"SI":"NO");
 
-    /*auxiliar->clave = 2;
+
+
+    auxiliar->clave = 2;
     printf("Borro nodo con dos hijos (2): %s\n", (arbol_borrar(arbol, auxiliar))==0?"SI":"NO");
 
     auxiliar->clave = 4;
     printf("Borro la raiz (4): %s\n", (arbol_borrar(arbol, auxiliar))==0?"SI":"NO");
-*/
-    mostrar_elemento(arbol->nodo_raiz, NULL);
-    //mostrar_elemento(arbol->nodo_raiz->izquierda, NULL);
-    //mostrar_elemento(arbol->nodo_raiz->derecha, NULL);
+
 
     auxiliar->clave = 3;
     printf("Busco el elemento (3): %s\n", ((cosa*)arbol_buscar(arbol, auxiliar))->clave==3?"SI":"NO");
