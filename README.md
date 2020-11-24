@@ -76,15 +76,20 @@ El objetivo de tener una función destrucción es permitirle al usuario ejecutar
 
 ### Complejidad de las Operaciones
 
+A continuación se analiza la complejidad de operaciones en el peor de los casos.
 
-| Operación | Complejidad |
-| ------ | ------ |
-| Crear | *O(1)* | 
-| Destruir | *O(n)* |
-| Insertar en lugar *n* | *O(n)* | 
-| Eliminar en lugar *n* | *O(n)* |
-| Está vacía | *O(1)* |
-| Ver Elemento en lugar *n* |
+| Operación | Complejidad | ¿Por qué? |
+| ------ | ------ | ------ |
+| Crear | *O(1)* | Son acciones únicas que se no se repiten |
+| Insertar | *O(n)* | En el caso de que el arbol se haya deformado hacia una lista, deberá recorrer todos los elementos |
+| Borrar | *O(n)* | En el caso de que el arbol se haya deformado hacia una lista, deberá recorrer todos los elementos |
+| Buscar | *O(n)* | En el caso de que el arbol se haya deformado hacia una lista, deberá recorrer todos los elementos |
+| Raiz | *O(1)* | Una accion donde no se necesita recorrer el arbol, solo trata de devolver un atributo de la estructura |
+| Vacio | *O(1)* | Una accion donde no se necesita recorrer el arbol, solo se fija si existe un atributo de la estructura |
+| Recorridos (Pre, In, Post) | *O(n)* | Recorre todos lo elementos del arbol |
+| Destruir | *O(n)* | Recorre todos los elementos del arbol |
+
+
 
 Licencia
 ----
