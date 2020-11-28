@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "abb.h"
-#include "lista.h"
+//#include "lista.h"
 
 #define EXITO 0
 #define ERROR 1
@@ -38,7 +38,7 @@ nodo_abb_t* crear_nodo(void* elemento){
     char contenido[10];
 }cosita_t;
 */
-void imprimir_arbol(abb_t* arbol){
+/*void imprimir_arbol(abb_t* arbol){
   lista_t* cola = lista_crear();
   nodo_abb_t* corriente = arbol->nodo_raiz;
   lista_encolar(cola, corriente);
@@ -60,6 +60,7 @@ void imprimir_arbol(abb_t* arbol){
   lista_destruir(cola);
   printf("\n\n");
 }
+*/
 
 /*
 
@@ -260,15 +261,15 @@ void* arbol_buscar(abb_t* arbol, void* elemento){
   return nodo->elemento;
 }
 
-nodo_abb_t* sucesor_inorden(nodo_abb_t* nodo){
+nodo_abb_t* obtener_predecesor_inorden(nodo_abb_t* nodo){
   if(!nodo || !nodo->derecha)
     return nodo;
   
-  return sucesor_inorden(nodo->derecha);
+  return obtener_predecesor_inorden(nodo->derecha);
 }
 
 nodo_abb_t* borrar_rec(nodo_abb_t* nodo, void* elemento, abb_comparador comparador, abb_liberar_elemento destructor){
-  if(!nodo) return nodo;
+  if(!nodo) return NULL;
 
   //navegar hasta el nodo
   if(comparador(nodo->elemento, elemento) == PRIMER_ELEMENTO_MAYOR){
@@ -291,11 +292,11 @@ nodo_abb_t* borrar_rec(nodo_abb_t* nodo, void* elemento, abb_comparador comparad
     }
 
     //nodo tiene 2 ramas
-    nodo_abb_t* sucesor_inorden_izquierdo = sucesor_inorden(nodo->izquierda);
+    nodo_abb_t* predecesor_inorden = obtener_predecesor_inorden(nodo->izquierda);
     nodo_abb_t* aux = nodo->elemento;
-    nodo->elemento = sucesor_inorden_izquierdo->elemento;
-    sucesor_inorden_izquierdo->elemento = aux;
-    nodo->izquierda = borrar_rec(nodo->izquierda, sucesor_inorden_izquierdo->elemento, comparador, destructor);
+    nodo->elemento = predecesor_inorden->elemento;
+    predecesor_inorden->elemento = aux;
+    nodo->izquierda = borrar_rec(nodo->izquierda, predecesor_inorden->elemento, comparador, destructor);
   }
   
   return nodo;
@@ -305,8 +306,9 @@ int arbol_borrar(abb_t* arbol, void* elemento){
   if(!arbol)
     return ERROR;
 
-  arbol->nodo_raiz = borrar_rec(arbol->nodo_raiz, elemento, arbol->comparador, arbol->destructor);
+  if(!arbol_buscar(arbol, elemento)) return ERROR;
 
+  arbol->nodo_raiz = borrar_rec(arbol->nodo_raiz, elemento, arbol->comparador, arbol->destructor);
   return EXITO;
 }
 
