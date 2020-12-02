@@ -114,13 +114,15 @@ void destruir_nodo(nodo_abb_t* nodo, abb_liberar_elemento destructor){
 }
 
 void inorden(nodo_abb_t* nodo, void** array, size_t tamanio_array, size_t* cantidad_actual){
-  if(!nodo || *cantidad_actual == tamanio_array)
-    return;
   
   if(nodo->izquierda)
     inorden(nodo->izquierda, array, tamanio_array, cantidad_actual);
 
-  array[(*cantidad_actual)++] = nodo->elemento;
+  if(!nodo || *cantidad_actual >= tamanio_array)
+    return;
+
+  array[*cantidad_actual] = nodo->elemento;
+  (*cantidad_actual)++;
 
   if(nodo->derecha)
     inorden(nodo->derecha, array, tamanio_array, cantidad_actual);
@@ -141,8 +143,6 @@ void preorden(nodo_abb_t* nodo, void** array, size_t tamanio_array, size_t* cant
 }
 
 void postorden(nodo_abb_t* nodo, void** array, size_t tamanio_array, size_t* cantidad_actual){
-  if(!nodo || *cantidad_actual == tamanio_array)
-    return;
 
   if(nodo->izquierda)
     postorden(nodo->izquierda, array, tamanio_array, cantidad_actual);
@@ -150,6 +150,8 @@ void postorden(nodo_abb_t* nodo, void** array, size_t tamanio_array, size_t* can
   if(nodo->derecha)
     postorden(nodo->derecha, array, tamanio_array, cantidad_actual);
 
+  if(!nodo || *cantidad_actual == tamanio_array)
+    return;
   array[(*cantidad_actual)++] = nodo->elemento;
 }
 

@@ -173,7 +173,7 @@ void probar_borrar(){
     pa2m_afirmar(arbol_borrar(arbol, auxiliar) == EXITO, "borrar elemento (2) raiz");
     pa2m_afirmar(arbol_buscar(arbol, auxiliar) == NULL, "El elemento ya no se encuentra en el arbol");
 
-     cosita_t* aux_insertar = crear_cosita(3.5);
+     cosita_t* aux_insertar = crear_cosita(3.5); //inserto en el medio del proceso
      arbol_insertar(arbol, aux_insertar);
 
     cosita_t* aux_borrar = crear_cosita(5);
@@ -186,7 +186,7 @@ void probar_borrar(){
     for(int i = 0; i < 10 && borro_bien_los_elementos; i++){
         borro_bien_los_elementos = ((cosita_t*)cositas_recorridas[i])->clave == claves_esperadas[i];
     }
-    pa2m_afirmar(borro_bien_los_elementos, "El arbol quedó con la estructura correcta despues de el borrado");
+    pa2m_afirmar(borro_bien_los_elementos, "El arbol quedó con la estructura correcta despues del borrado");
 
     destruir_cosita(aux_borrar);
     destruir_cosita(auxiliar);
@@ -246,13 +246,21 @@ void probar_recorrido_inorden(){
     pa2m_afirmar(arbol_recorrido_inorden(arbol, NULL, 0) == 0, "Si la cantidad de elementos para guardar es 0 no se recorre el arbol");
 
 
-    pa2m_afirmar(arbol_recorrido_inorden(arbol, cositas, 10) == 10, "Se recorren 10 elementos");
+    pa2m_afirmar(arbol_recorrido_inorden(arbol, cositas, 10) == 10, "Se recorren todos los elementos");
 
     bool guardo_en_orden = true;
     for(int i = 0; i < 10 && guardo_en_orden; i++){
         guardo_en_orden = ((cosita_t*)cositas[i])->clave == claves_esperadas[i];
     }
-    pa2m_afirmar(guardo_en_orden, "guarda en inorden los 10 elementos");
+    pa2m_afirmar(guardo_en_orden, "guarda en inorden todos los elementos");
+
+     pa2m_afirmar(arbol_recorrido_inorden(arbol, cositas, 8) == 8, "Se recorren 8 elementos");
+
+    guardo_en_orden = true;
+    for(int i = 0; i < 8 && guardo_en_orden; i++){
+        guardo_en_orden = ((cosita_t*)cositas[i])->clave == claves_esperadas[i];
+    }
+    pa2m_afirmar(guardo_en_orden, "guarda en inorden 8 elementos");
 
     arbol_destruir(arbol);
     
@@ -275,13 +283,28 @@ void probar_recorrido_preorden(){
     pa2m_afirmar(arbol_recorrido_preorden(arbol, NULL, 0) == 0, "Si la cantidad de elementos para guardar es 0 no se recorre el arbol");
 
 
-    pa2m_afirmar(arbol_recorrido_preorden(arbol, cositas, 10) == 10, "Se recorren 10 elementos");
+    pa2m_afirmar(arbol_recorrido_preorden(arbol, cositas, 10) == 10, "Se recorren todos elementos");
 
     bool guardo_en_orden = true;
     for(int i = 0; i < 10 && guardo_en_orden; i++){
         guardo_en_orden = ((cosita_t*)cositas[i])->clave == claves_esperadas[i];
     }
-    pa2m_afirmar(guardo_en_orden, "guarda en inorden los 10 elementos");
+    pa2m_afirmar(guardo_en_orden, "guarda en inorden todos los elementos");
+
+    guardo_en_orden = true;
+    for(int i = 0; i < 8 && guardo_en_orden; i++){
+        guardo_en_orden = ((cosita_t*)cositas[i])->clave == claves_esperadas[i];
+    }
+    pa2m_afirmar(guardo_en_orden, "guarda en inorden todos los elementos");
+
+    pa2m_afirmar(arbol_recorrido_preorden(arbol, cositas, 8) == 8, "Se recorren 8 elementos");
+
+    guardo_en_orden = true;
+    for(int i = 0; i < 8 && guardo_en_orden; i++){
+        guardo_en_orden = ((cosita_t*)cositas[i])->clave == claves_esperadas[i];
+    }
+    pa2m_afirmar(guardo_en_orden, "guarda en inorden 8 elementos");
+
     arbol_destruir(arbol);
 }
 
@@ -302,13 +325,28 @@ void probar_recorrido_postorden(){
     pa2m_afirmar(arbol_recorrido_postorden(arbol, NULL, 0) == 0, "Si la cantidad de elementos para guardar es 0 no se recorre el arbol");
 
 
-    pa2m_afirmar(arbol_recorrido_postorden(arbol, cositas, 10) == 10, "Se recorren 10 elementos");
+    pa2m_afirmar(arbol_recorrido_postorden(arbol, cositas, 10) == 10, "Se recorren todos elementos");
 
     bool guardo_en_orden = true;
     for(int i = 0; i < 10 && guardo_en_orden; i++){
         guardo_en_orden = ((cosita_t*)cositas[i])->clave == claves_esperadas[i];
     }
-    pa2m_afirmar(guardo_en_orden, "guarda en postorden los 10 elementos");
+    
+    pa2m_afirmar(guardo_en_orden, "guarda en postorden los todos elementos");
+
+    guardo_en_orden = true;
+    for(int i = 0; i < 8 && guardo_en_orden; i++){
+        guardo_en_orden = ((cosita_t*)cositas[i])->clave == claves_esperadas[i];
+    }
+    pa2m_afirmar(guardo_en_orden, "guarda en inorden todos los elementos");
+
+    pa2m_afirmar(arbol_recorrido_postorden(arbol, cositas, 8) == 8, "Se recorren 8 elementos");
+
+    guardo_en_orden = true;
+    for(int i = 0; i < 8 && guardo_en_orden; i++){
+        guardo_en_orden = ((cosita_t*)cositas[i])->clave == claves_esperadas[i];
+    }
+    pa2m_afirmar(guardo_en_orden, "guarda en inorden 8 elementos");
     arbol_destruir(arbol);
 }
 
