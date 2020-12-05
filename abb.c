@@ -6,9 +6,7 @@
 #define EXITO 0
 #define ERROR 1
 
-#define PRIMER_ELEMENTO_MAYOR 1
 #define IGUALES 0
-#define SEGUNDO_ELEMENTO_MAYOR -1
 
 #define IZQ -1
 #define DER 1
@@ -76,7 +74,7 @@ void* insertar_elemento(nodo_abb_t* nodo, void* elemento, abb_comparador compara
     return nuevo_nodo;
   }
 
-  if(comparador(nodo->elemento, elemento) == SEGUNDO_ELEMENTO_MAYOR){
+  if(comparador(nodo->elemento, elemento) < 0){
     nodo->derecha = insertar_elemento(nodo->derecha, elemento, comparador, estado);
   } else {
     nodo->izquierda = insertar_elemento(nodo->izquierda, elemento, comparador, estado);
@@ -95,10 +93,10 @@ nodo_abb_t* buscar_nodo(nodo_abb_t* nodo, void* elemento, abb_comparador compara
   if(comparador(nodo->elemento, elemento) == IGUALES)
     return nodo;
   
-  if(comparador(nodo->elemento, elemento) == PRIMER_ELEMENTO_MAYOR)
+  if(comparador(nodo->elemento, elemento) > 0)
       return buscar_nodo(nodo->izquierda, elemento, comparador);
   
-  if(comparador(nodo->elemento, elemento) == SEGUNDO_ELEMENTO_MAYOR)
+  if(comparador(nodo->elemento, elemento) < 0)
     return buscar_nodo(nodo->derecha, elemento, comparador);
 
   return NULL;
@@ -274,10 +272,10 @@ nodo_abb_t* borrar_rec(nodo_abb_t* nodo, void* elemento, abb_comparador comparad
   if(!nodo) return NULL;
 
   //navegar hasta el nodo
-  if(comparador(nodo->elemento, elemento) == PRIMER_ELEMENTO_MAYOR){
+  if(comparador(nodo->elemento, elemento) > 0){
     nodo->izquierda = borrar_rec(nodo->izquierda, elemento, comparador, destructor);
 
-  } else if(comparador(nodo->elemento, elemento) == SEGUNDO_ELEMENTO_MAYOR){
+  } else if(comparador(nodo->elemento, elemento) < 0){
     nodo->derecha = borrar_rec(nodo->derecha, elemento, comparador, destructor);
   } else {
     //nodo tiene una rama
