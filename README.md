@@ -1,35 +1,29 @@
-# TDA Árbol
+# *Pokemon en C* - Trabajo práctico de algoritmos y programacion 2
 
-[![N|Solid](https://yourbasic.org/algorithms/tree.png)](https://nodesource.com/products/nsolid)
+[![N|Solid](https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/1200px-International_Pok%C3%A9mon_logo.svg.png)](https://nodesource.com/products/nsolid)
 
 # El programa
 
 ### ¿Qúe es?
 
-Es una implementación del tipo de dato abstracto "Arbol binario de búsqueda", con diferentes primitivas que permiten utilizarlo con cualquier tipo de dato que sea comparable. La lista está implementada con nodos en memoria dinámica.
+Es un juego el cual se puede ir combatiendo contra diferentes gimnasios, mientras se va mejorando la pokedex en el camino. 
+
+### ¿Cómo es la jugabilidad?
+Se juega todo desde la terminal, utilizando el teclado para navegar por los menus y batallar.
 
 ### Compilación
 
 Para compilarlo se puede hacer uso del siguiente comando dentro de la carpeta del proyecto.
 ```
-$ make abb
+$ make tp2
 ```
 
 ### Ejecución
 
-La ejecución es muy sencilla, solo basta con el siguiente comando para correr todas las pruebas unitarias del TDA.
+La ejecución es muy sencilla, solo basta con el siguiente comando en la terminal.
 ```
-$ ./abb
+$ ./tp2
 ```
-
-### Tests de memoria
-
-El test de memoria con Valgrind se corre de la siguiente manera.
-```
-$ make mem_test
-```
-
-Para mas comandos visitar el Makefile.
 
 ### Funcionamiento general de la implementación
 
